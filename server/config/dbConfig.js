@@ -1,12 +1,15 @@
+import { config } from 'dotenv'
 const mongoose = require('mongoose')
+
+config()
 
 mongoose.connect(process.env.DATABASE_URL)
 
 const connection = mongoose.connection
 
-connection.on('connected' , ()=>{
+connection.on('connected', () => {
     console.log('Connection Successful')
 })
-connection.on('error' , ()=>{
+connection.on('error', () => {
     console.log('Connection unsuccessful')
 })
