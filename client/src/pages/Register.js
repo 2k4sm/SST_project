@@ -11,12 +11,11 @@ function Register() {
       console.log(response)
       if (response.success) {
         message.success(response.message);
-        navigate("/login");
+        navigate("api/users/login");
       }
       else {
         message.error(response.message);
       }
-      console.log(response)
     } catch (err) {
       console.log(err)
     }

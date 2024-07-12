@@ -1,7 +1,8 @@
 const express = require("express");
 const User = require("../models/userModel");
 const bcrpyt = require("bcrypt")
-
+const jwt = require('jsonwebtoken');
+const authMiddleware = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -50,10 +51,25 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-
     res.status(200).json({ "message": "Login Succesful", "token": token });
 
 });
 
+
+router.get('/get-current-user', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.find(req.body.userId).select("-password");
+        res.send({
+            success: true,
+            message: 'user found!',
+            data: user
+        });
+    } catch (err) {
+        res.status(400).send({
+            success: false,
+            message: err.message
+        })
+    }
+});
 
 module.exports = router;
